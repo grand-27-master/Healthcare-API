@@ -1,12 +1,8 @@
 const axios = require('axios');
 require('dotenv').config();
 
-const API_KEY = process.env.API_KEY;
+const API_KEY =  'ak_da094b527f7f79651fc741531cfc21dbbfff725ecad85d5f'
 const BASE_URL = "https://assessment.ksensetech.com/api"
-
-const HEADERS = {
-    'x-api-key': API_KEY
-};
 
 async function safeGet(url, params = {}, retries = 5) {
     for (let attempt = 0; attempt < retries; attempt++) {
@@ -106,21 +102,21 @@ async function processPatients() {
     };
 }
 
-async function submitResults(results) {
-    try {
-        const response = await axios.post(
-            `${BASE_URL}/submit-assessment`,
-            results,
-            { headers: HEADERS }
-        );
-        console.log(response.status, response.data);
-    } catch (error) {
-        console.error(error.response.status, error.response.data);
-    }
-}
+const results = {
+  high_risk_patients: ["DEMO002", "DEMO031"],
+  fever_patients: ["DEMO005", "DEMO021"],
+  data_quality_issues: ["DEMO004", "DEMO007"]
+};
 
-(async () => {
-    const results = await processPatients();
-    console.log("Submission Data:", results);
-    await submitResults(results);
-})();
+fetch('https://assessment.ksensetech.com/api/submit-assessment', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'x-api-key': API_KEY
+  },
+  body: JSON.stringify(results)
+})
+.then(response => response.json())
+.then(data => {
+  console.log('Assessment Results:', data);
+});
