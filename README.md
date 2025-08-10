@@ -1,4 +1,4 @@
-# Patient Risk Scoring System (JavaScript)
+# Patient Risk Scoring System
 
 This project is a part of an assessment that implements a risk scoring system for patients using the Healthcare API.
 
